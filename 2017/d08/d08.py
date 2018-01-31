@@ -68,13 +68,21 @@ def make_assignment(reg, assignment):
         reg[key] -= value
     
 
+# Part 1
 reg = dict()
 for line in lines:
     process_line(reg, line)
     
 max_value = max(reg.values())
+print max_value
 
+# Part 2
+reg = dict()
+max_value = 0
+for line in lines:
+    process_line(reg, line)
+    max_value = max([max_value] + reg.values())
 
-
+max_value
 
 

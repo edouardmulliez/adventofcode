@@ -38,7 +38,6 @@ print(root)
 
 
 # Part 2
-line = lines[0]
 
 def process_line2(tree, line):
     """
@@ -74,36 +73,43 @@ tree = dict()
 for line in lines:
     process_line2(tree, line)
 
-def get_corrected_weight(tree, node):
-    
+
+def find_different_child(tree, parent):
     children = tree[node]['children']
-    if len(children) == 0:
-        return None
-    
     weights = [get_tower_weight(tree, child) for child in tree[node]['children']]
-    if len(weights) > 2 and len(set(weights)) > 1:
-        # Tower is unbalanced
-        for w in weights:
-            if weights.count(w) > 1:
-                return w
-        print node
-        print weights
-        raise ValueError('No corrected weight found')
+    if len(set(weights)) <= 1:
+        return None # balanced
+    
+    if len(set(weights)) > 2:
+        raise ValueError('More than 2 subtowers different weights')
+    if len(children) == 2:
+        raise ValueError('Unbalanced with only two children')
     
     for child in children:
-        corrected_w = get_corrected_weight(tree, child)
-        if corrected_w is not None:
-            return corrected_w
+        if weights.count(tree[child]['tower_weight']) == 1:
+            return child
     
+    raise ValueError('Could not find a single different weight')
+    
+
+def get_parent(node):    
+    for parent in tree.keys():
+        if node in tree[parent]['children']:
+            return parent
     return None
+    
+# Find the node to be modified: unbalanced, but children balanced
+node = root
+while find_different_child(tree, node) is not None:
+    node = find_different_child(tree, node)
+# Find parent node
+parent = get_parent(node)
+for child in tree[parent]['children']:
+    if child != node:
+        diff = tree[node]['tower_weight'] - tree[child]['tower_weight']
+        break
 
-
-get_corrected_weight(tree, root)
-
-
-
-
-tree
-
+correct_weight = tree[node]['weight'] - diff
+print correct_weight
 
 

@@ -13,23 +13,11 @@ with open("input.txt", "r") as f:
     input = f.read()
     
     
-with open("test2.txt", "r") as f:
-    input = f.read()
+#with open("test2.txt", "r") as f:
+#    input = f.read()
 
 
-# Take care of ! character:
-def clean_exclamation(s):
-    """
-    Remove characters depending on '!' positions.
-    """
-    idx = []
-    for i in range(1,len(s)):
-        if s[i] == '!' and s[i-1] != '!':
-            idx += [i, i+1]
-    idx = [i for i in range(len(s)) if i not in idx]
-    
-    return(''.join([s[i] for i in idx]))
-
+# Part 1
 
 def clean_garbadge(s):
     """
@@ -39,8 +27,12 @@ def clean_garbadge(s):
     i = 0
     while (i < len(s)):
         if s[i] == '<':
+            # In garbadge
             start = i
             while s[i] != '>':
+                if s[i] == '!':
+                    # Ignore next character
+                    i += 1
                 i += 1
             stop = i
             idx += range(start, stop+1)
@@ -51,6 +43,9 @@ def clean_garbadge(s):
 
 
 def get_score(s, level):
+    """
+    Compute score. Assume garbadge has been removed.
+    """
     if '{' not in s:
         return 0
     
@@ -75,7 +70,6 @@ def get_score(s, level):
 
 
 def clean_and_score(s):
-    s = clean_exclamation(s)
     s = clean_garbadge(s)
     return get_score(s, level=1)
 
@@ -91,3 +85,37 @@ assert(clean_and_score('{{<a!>},{<a!>},{<a!>},{<ab>}}') == 3)
 
 print(clean_and_score(input))
 
+
+
+# Part 2
+
+def count_garbadge(s):
+    """
+    Count non-cancelled characters in garbadge.
+    """
+    count = 0
+    i = 0
+    while (i < len(s)):
+        if s[i] == '<':
+            # In garbadge
+            i += 1
+            while s[i] != '>':
+                if s[i] == '!':
+                    # Ignore next character
+                    i += 2
+                else:
+                    count += 1
+                    i += 1
+        i += 1
+        
+    return count
+
+
+assert(count_garbadge('zlkdnn<>m,!e,f')== 0)
+assert(count_garbadge('zlkdnn<>m,!<random characters>e,f')== 17)
+assert(count_garbadge('zlkd<<<<>nn<>m,!e,f')== 3)
+assert(count_garbadge('zlkdnn<>m,!e,<!!!>>f')== 0)
+assert(count_garbadge('zlkdnn<>m,!e,f')== 0)
+assert(count_garbadge('<{o"i!a,<{i<a>')== 10)
+
+print count_garbadge(input)
