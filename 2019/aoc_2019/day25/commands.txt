@@ -1,0 +1,45 @@
+south
+north
+east
+take whirled peas
+east
+east
+east
+east
+take dark matter
+west
+west
+north
+south
+west
+north
+take prime number
+south
+west
+north
+take coin
+north
+south
+west
+south
+take antenna
+north
+north
+west
+take astrolabe
+east
+north
+south
+south
+east
+north
+south
+south
+west
+north
+take fixed point
+north
+take weather machine
+east
+south
+SAVE

@@ -32,7 +32,6 @@ def get_direction(current_direction, turn):
         return D_UP if turn == T_LEFT else D_DOWN
 
 
-
 def ascii_to_string(n):
     return str(chr(n))
 
